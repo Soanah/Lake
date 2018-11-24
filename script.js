@@ -40,3 +40,25 @@ class Fish
 
 //const fish1 = new Fish(100, 250, 118, 74)
 //fish1.drawFish()
+
+/* Add or remove Fish */
+let arrayFish = []
+var posX = 100
+var posY = 500
+$canvas.addEventListener('click', (_event) =>
+{
+    if (arrayFish.length < 6) 
+    {       
+        arrayFish.push(new Fish(posX, posY, 118, 74))
+        posX += 200
+        posY -= 50
+    }
+    for(let i = 0; i < arrayFish.length ; i++)
+    {
+        arrayFish[i].drawFish()
+    }
+})
+
+
+
+console.log(arrayFish)
