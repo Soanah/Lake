@@ -17,6 +17,15 @@ const resize = () =>
 window.addEventListener('resize', resize)
 resize()
 
+/* Cursor */
+const cursor = { x: 0, y: 0}
+
+window.addEventListener('mousemove', (_event) =>
+{
+    cursor.x= _event.clientX
+    cursor.y = _event.clientY
+})
+
 /* Create fish */ 
 
 class Fish
@@ -43,22 +52,17 @@ class Fish
 
 /* Add or remove Fish */
 let arrayFish = []
-var posX = 100
-var posY = 500
+
 $canvas.addEventListener('click', (_event) =>
 {
     if (arrayFish.length < 6) 
     {       
-        arrayFish.push(new Fish(posX, posY, 118, 74))
-        posX += 200
-        posY -= 50
+        arrayFish.push(new Fish(cursor.x, cursor.y, 118, 74))
     }
     for(let i = 0; i < arrayFish.length ; i++)
     {
         arrayFish[i].drawFish()
     }
 })
-
-
 
 console.log(arrayFish)
