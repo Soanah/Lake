@@ -11,7 +11,7 @@ Fish swiming in a lake - full canvas
 - Fish move randomly on the screen
 - Fish revert when they reach the window's border
 
-## TO DO
+## To do
 
 - Scare the fish when you click on the screen, which increase their speed
 - Feed the fish, particles appear at a point, fish dash on it 
