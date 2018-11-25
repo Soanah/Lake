@@ -40,8 +40,8 @@ class Fish
         this.bodyHeight = _bodyHeight
         this.tailWidth = this.bodyLength/4
         this.tailHeight = this.bodyHeight/2
-        //this.eyeLength = 
-        //this.eyeHeigth =
+        this.eyeLength = this.bodyLength/12
+        this.eyeHeigth =this.bodyHeight/2
         this.color = '#FFB745'
     }
     drawFish()
@@ -50,7 +50,7 @@ class Fish
         context.save()
         /*body*/
         context.beginPath()
-        context.scale(1, 0.15)
+        context.scale(1, 0.15) //le bug du placement au clic vient du premier paramètre 
         context.arc(this.posX, this.posY, this.bodyLength, this.bodyHeight, Math.PI * 2, true)
         context.fill()
         /*tail*/
@@ -60,17 +60,16 @@ class Fish
         context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY+this.tailHeight+30)
         context.fill()
         context.restore()
-        /*eyes
+        /*eyes*/
         context.fillStyle = '#000000'
         context.save()
         context.beginPath()
-        context.scale(1, 0.1)
-        context.arc(this.posX, this.posY, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
-        //context.translate(this.posX - 5, this.posY - 5)
-        //context.arc(this.posX, this.posY, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
+        context.scale(1, 0.15)
+        context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY+this.bodyHeight-this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
+        context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY-this.bodyHeight+this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
         context.fill()
-        /*fins
-        context.restore()*/
+        /*fins*/
+        context.restore()
     } 
 }
 //const fish1 = new Fish(100, 250, 118, 74)
