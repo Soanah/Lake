@@ -39,9 +39,11 @@ class Fish
         this.bodyLength = _bodyLength
         this.bodyHeight = _bodyHeight
         this.tailWidth = this.bodyLength/4
-        this.tailHeight = this.bodyHeight/2
-        this.eyeLength = this.bodyLength/12
+        this.tailHeight = this.bodyHeight/3
+        this.eyeLength = this.bodyLength/15
         this.eyeHeigth =this.bodyHeight/2
+        this.finWidth = this.bodyLength/4
+        this.finHeight = this.bodyHeight/1.5
         this.color = '#FFB745'
     }
     drawFish()
@@ -50,14 +52,28 @@ class Fish
         context.save()
         /*body*/
         context.beginPath()
-        context.scale(1, 0.15) //le bug du placement au clic vient du premier paramètre 
-        context.arc(this.posX, this.posY, this.bodyLength, this.bodyHeight, Math.PI * 2, true)
+        context.scale(1, 0.15)
+        context.arc(this.posX, this.posY*(1/0.15), this.bodyLength, this.bodyHeight, Math.PI * 2, true)
         context.fill()
+        context.restore()
         /*tail*/
         context.beginPath()
-        context.moveTo(this.posX-this.bodyLength+10, this.posY)
-        context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY-this.tailHeight-30)
-        context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY+this.tailHeight+30)
+        context.moveTo(this.posX-this.bodyLength+this.eyeLength*2, this.posY)
+        context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY-this.tailHeight)
+        context.lineTo(this.posX-this.bodyLength-this.eyeLength*2, this.posY)
+        context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY+this.tailHeight)
+        context.fill()
+        /*fins*/
+        context.fillStyle = this.color
+        context.save()
+        context.beginPath()
+        context.moveTo((this.posX+this.finWidth)+this.bodyLength/4, this.posY)
+        context.lineTo(this.posX, this.posY-this.finHeight)
+        context.lineTo((this.posX-this.finWidth/4)+this.bodyLength/4, this.posY)
+
+        context.moveTo((this.posX+this.finWidth)+this.bodyLength/4, this.posY)
+        context.lineTo(this.posX, this.posY+this.finHeight)
+        context.lineTo((this.posX-this.finWidth/4)+this.bodyLength/4, this.posY)
         context.fill()
         context.restore()
         /*eyes*/
@@ -65,10 +81,9 @@ class Fish
         context.save()
         context.beginPath()
         context.scale(1, 0.15)
-        context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY+this.bodyHeight-this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
-        context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY-this.bodyHeight+this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
+        context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY*(1/0.15)-this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
+        context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY*(1/0.15)+this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
         context.fill()
-        /*fins*/
         context.restore()
     } 
 }
