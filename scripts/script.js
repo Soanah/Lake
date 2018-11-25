@@ -214,7 +214,7 @@ class Button{
         }
         if(this.type == 2)
         {
-            if (arrayFish.length < 6) 
+            if (arrayFish.length < 12) 
             {       
                 arrayFish.push(new Fish(10 + Math.random()*windowWidth, 10 + Math.random()*windowHeight, (-5 + Math.random()*10), (-5 + Math.random()*10), 118, 74))
             }
@@ -226,10 +226,6 @@ class Button{
                 arrayFish.pop()
             }
         }
-        if(this.type == 4)
-        {
-            console.log('che aps')
-        }
     }
 }
 
@@ -239,7 +235,6 @@ class Button{
 const audioPlayer = new Button('On/Off', 600, 5, 1)
 const addFishButton = new Button('Add a fish !', 800, 5, 2)
 const removeFishButton = new Button('Remove a fish !', 1000, 5, 3)
-const scareThemButton = new Button('Scare Them !', 1200, 5, 4)
 
 /**
  * Detectection Button
@@ -251,7 +246,6 @@ $canvas.addEventListener('click', (_event) =>
     audioPlayer.isClicked(cursor.x,cursor.y)
     addFishButton.isClicked(cursor.x,cursor.y)
     removeFishButton.isClicked(cursor.x,cursor.y)
-    scareThemButton.isClicked(cursor.x,cursor.y)
 })
 
 /**
@@ -276,7 +270,6 @@ const loop = () =>
     audioPlayer.drawButton()
     addFishButton.drawButton()
     removeFishButton.drawButton()
-    scareThemButton.drawButton()
     for(let i = 0; i < arrayFish.length ; i++)
     {
         arrayFish[i].update()
