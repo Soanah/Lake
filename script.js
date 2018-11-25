@@ -90,30 +90,39 @@ class Fish
     }
     drawFish()
     {
-        context.fillStyle = this.color
-        if(this.speedX < 0)
         context.save()
+        context.fillStyle = this.color
+        context.translate(this.posX+this.bodyLength/2,this.posY+this.bodyHeight/2)
+        if(this.speedX < 0){
+            context.rotate(Math.PI)
+        }
+        else{
+            context.rotate(0)
+        }
+        context.translate(-this.posX-this.bodyLength/2,-this.posY-this.bodyHeight/2)
         /*body*/
+        context.save()
         context.beginPath()
         context.scale(1, 0.15)
         context.arc(this.posX, this.posY*(1/0.15), this.bodyLength, this.bodyHeight, Math.PI * 2, true)
         context.fill()
         context.restore()
         /*tail*/
+        context.save()
         context.beginPath()
         context.moveTo(this.posX-this.bodyLength+this.eyeLength*2, this.posY)
         context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY-this.tailHeight)
         context.lineTo(this.posX-this.bodyLength-this.eyeLength*2, this.posY)
         context.lineTo(this.posX-this.bodyLength-this.tailWidth, this.posY+this.tailHeight)
         context.fill()
+        context.restore()
         /*fins*/
-        context.fillStyle = this.color
         context.save()
+        context.fillStyle = this.color
         context.beginPath()
         context.moveTo((this.posX+this.finWidth)+this.bodyLength/4, this.posY)
         context.lineTo(this.posX, this.posY-this.finHeight)
         context.lineTo((this.posX-this.finWidth/4)+this.bodyLength/4, this.posY)
-
         context.moveTo((this.posX+this.finWidth)+this.bodyLength/4, this.posY)
         context.lineTo(this.posX, this.posY+this.finHeight)
         context.lineTo((this.posX-this.finWidth/4)+this.bodyLength/4, this.posY)
@@ -127,6 +136,7 @@ class Fish
         context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY*(1/0.15)-this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
         context.arc(this.posX+this.bodyLength-this.eyeLength*3, this.posY*(1/0.15)+this.eyeHeigth, this.eyeLength, this.eyeHeigth, Math.PI * 2, true)
         context.fill()
+        context.restore()
         context.restore()
     } 
 }
