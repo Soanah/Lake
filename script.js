@@ -4,20 +4,39 @@ const context = $canvas.getContext('2d')
 
 $canvas.style.backgroundColor = 'rgba(34, 160, 226, 0.5)'
 
-/* Resize */
-const sizes = { width: 800, height: 600 }
+/*Resize*/
+let windowWidth = $canvas.width
+let windowHeight = $canvas.height
 
 const resize = () =>
 {
-    sizes.width = window.innerWidth
-    sizes.height = window.innerHeight
+    windowWidth = window.innerWidth
+    windowHeight = window.innerHeight
 
-    $canvas.width = sizes.width
-    $canvas.height = sizes.height
+    $canvas.width = windowWidth
+    $canvas.height = windowHeight
 }
 
 window.addEventListener('resize', resize)
 resize()
+/*Audio*/
+
+function sound(_src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = _src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+let audio = new sound("media/ambience.mp3");
+
 
 /* Cursor */
 const cursor = { x: 0, y: 0}
@@ -29,13 +48,14 @@ window.addEventListener('mousemove', (_event) =>
 })
 
 /* Create fish */ 
-
 class Fish
 {
-    constructor(_posX, _posY, _bodyLength, _bodyHeight)
+    constructor(_posX, _posY, _speedX, _speedY, _bodyLength, _bodyHeight)
     {
         this.posX = _posX
         this.posY = _posY
+        this.speedX = _speedX
+        this.speedY = _speedY
         this.bodyLength = _bodyLength
         this.bodyHeight = _bodyHeight
         this.tailWidth = this.bodyLength/4
@@ -44,11 +64,34 @@ class Fish
         this.eyeHeigth =this.bodyHeight/2
         this.finWidth = this.bodyLength/4
         this.finHeight = this.bodyHeight/1.5
-        this.color = '#FFB745'
+        this.color = 'rgba(255, 183, 69, 1)'
+    }
+    update()
+    {
+        if(this.posX + this.bodyLength > windowWidth || this.posX - this.bodyLength < 0)
+        {
+            this.speedX = -this.speedX
+        }
+        if(this.posY + this.bodyHeight > windowHeight)
+        {
+            this.posY = windowHeight - this.bodyHeight - 1
+            this.speedY = -this.speedY
+        }
+        if(this.posY < 0)
+        {
+            this.posY = 1
+            this.speedY = -this.speedY
+        }
+        this.posX += this.speedX
+        this.posY += this.speedY
+
+        this.drawFish()
+
     }
     drawFish()
     {
         context.fillStyle = this.color
+        if(this.speedX < 0)
         context.save()
         /*body*/
         context.beginPath()
@@ -87,8 +130,6 @@ class Fish
         context.restore()
     } 
 }
-//const fish1 = new Fish(100, 250, 118, 74)
-//fish1.drawFish()
 
 /* Add or remove Fish */
 let arrayFish = []
@@ -97,11 +138,7 @@ $canvas.addEventListener('click', (_event) =>
 {
     if (arrayFish.length < 6) 
     {       
-        arrayFish.push(new Fish(cursor.x, cursor.y, 118, 74))
-    }
-    for(let i = 0; i < arrayFish.length ; i++)
-    {
-        arrayFish[i].drawFish()
+        arrayFish.push(new Fish(cursor.x, cursor.y, (-5 + Math.random()*10), (-5 + Math.random()*10), 118, 74))
     }
 })
 
@@ -114,3 +151,18 @@ $canvas.addEventListener('click', (_event) =>
     }
 })
 */
+
+/*Animation*/ 
+const loop = () =>
+{
+    window.requestAnimationFrame(loop)
+       // Clear
+       context.fillStyle = 'rgba(34, 160, 226, 0.5)'
+       context.fillRect(0, 0, windowWidth, windowHeight)
+    //audio.play()
+    for(let i = 0; i < arrayFish.length ; i++)
+    {
+        arrayFish[i].update()
+    }
+}
+loop()
