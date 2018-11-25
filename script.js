@@ -1,10 +1,18 @@
-/* Set up */
+/**
+ *  Set up 
+ */
 const $canvas = document.querySelector('.js-canvas')
 const context = $canvas.getContext('2d')
 
+/**
+ * Init
+ */
 $canvas.style.backgroundColor = 'rgba(34, 160, 226, 0.5)'
+let switchAudio = false
 
-/*Resize*/
+/** 
+ *  Resize
+ */
 let windowWidth = $canvas.width
 let windowHeight = $canvas.height
 
@@ -19,8 +27,10 @@ const resize = () =>
 
 window.addEventListener('resize', resize)
 resize()
-/*Audio*/
 
+/** 
+ * Audio
+ */
 function sound(_src) {
     this.sound = document.createElement("audio");
     this.sound.src = _src;
@@ -38,16 +48,20 @@ function sound(_src) {
 let audio = new sound("media/ambience.mp3");
 
 
-/* Cursor */
+/**
+ * Cursor
+ */
 const cursor = { x: 0, y: 0}
 
 window.addEventListener('mousemove', (_event) =>
 {
-    cursor.x= _event.clientX
+    cursor.x = _event.clientX
     cursor.y = _event.clientY
 })
 
-/* Create fish */ 
+/**
+ * Create fish 
+ */ 
 class Fish
 {
     constructor(_posX, _posY, _speedX, _speedY, _bodyLength, _bodyHeight)
@@ -68,7 +82,12 @@ class Fish
     }
     update()
     {
-        if(this.posX + this.bodyLength > windowWidth || this.posX - this.bodyLength < 0)
+        if(this.posX + this.bodyLength > windowWidth)
+        {
+            this.posX = windowWidth- this.bodyLength - 1
+            this.speedX = -this.speedX
+        }
+        if(this.posX < 0)
         {
             this.speedX = -this.speedX
         }
@@ -141,35 +160,123 @@ class Fish
     } 
 }
 
-/* Add or remove Fish */
+/**
+ *  Create Button
+ */
+class Button{
+    constructor(_text, _posX, _posY, _type)
+    {
+        this.posX = _posX
+        this.posY = _posY
+        this.text = _text
+        this.size = 150
+        this.height = 50
+        this.switch = false
+        this.type = _type
+        this.color = 'rgba(118, 200, 0, 0.5)'
+    }
+    drawButton()
+    {
+        context.save()
+        context.fillStyle = this.color
+        context.shadowOffsetX = 5 
+        context.shadowOffsetY = 5
+        context.shadowBlur = 10
+        context.shadowColor = 'rgba(0,0,0,0.5)'
+        context.fillRect(this.posX, this.posY, this.size, this.height)
+        context.fillStyle ='white'
+        context.font = '20px Helvetica'
+        context.textAlign = 'left'
+        context.textBaseline = 'middle'
+        context.fillText(this.text, this.posX+5, this.posY*6)
+        context.restore()
+    }
+    isClicked(cursorX,cursorY)
+    {
+        if(cursorX>this.posX && cursorX < this.posX + this.size){
+            if(cursorY>this.posY && cursorY < this.posY + this.height){
+                this.interaction()
+            }
+        }
+     
+    }
+    interaction()
+    {
+        if(this.type == 1)
+        {
+            if(switchAudio == false)
+            {
+                switchAudio = true
+            }
+            else{
+                switchAudio = false
+            }
+        }
+        if(this.type == 2)
+        {
+            if (arrayFish.length < 6) 
+            {       
+                arrayFish.push(new Fish(10 + Math.random()*windowWidth, 10 + Math.random()*windowHeight, (-5 + Math.random()*10), (-5 + Math.random()*10), 118, 74))
+            }
+        }
+        if(this.type == 3)
+        {
+            if (arrayFish.length >0) 
+            {       
+                arrayFish.pop()
+            }
+        }
+        if(this.type == 4)
+        {
+            console.log('che aps')
+        }
+    }
+}
+
+/**
+ * New Button
+ */
+const audioPlayer = new Button('On/Off', 600, 5, 1)
+const addFishButton = new Button('Add a fish !', 800, 5, 2)
+const removeFishButton = new Button('Remove a fish !', 1000, 5, 3)
+const scareThemButton = new Button('Scare Them !', 1200, 5, 4)
+
+/**
+ * Detectection Button
+ */
 let arrayFish = []
 
 $canvas.addEventListener('click', (_event) =>
 {
-    if (arrayFish.length < 6) 
-    {       
-        arrayFish.push(new Fish(cursor.x, cursor.y, (-5 + Math.random()*10), (-5 + Math.random()*10), 118, 74))
-    }
+    audioPlayer.isClicked(cursor.x,cursor.y)
+    addFishButton.isClicked(cursor.x,cursor.y)
+    removeFishButton.isClicked(cursor.x,cursor.y)
+    scareThemButton.isClicked(cursor.x,cursor.y)
 })
 
-/*
-$canvas.addEventListener('click', (_event) =>
-{
-    if (arrayFish.length >0) 
-    {       
-        arrayFish.pop()
-    }
-})
-*/
-
-/*Animation*/ 
+/**
+ * Animation 
+ */
 const loop = () =>
 {
     window.requestAnimationFrame(loop)
-       // Clear
-       context.fillStyle = 'rgba(34, 160, 226, 0.5)'
-       context.fillRect(0, 0, windowWidth, windowHeight)
-    //audio.play()
+    // Clear
+    context.fillStyle = 'rgba(34, 160, 226, 0.5)'
+    context.fillRect(0, 0, windowWidth, windowHeight)
+    // Play Audio
+    if (switchAudio == true)
+    {
+        audio.play()
+    }
+    else
+    {
+        audio.stop()
+    }
+    // Button
+    audioPlayer.drawButton()
+    addFishButton.drawButton()
+    removeFishButton.drawButton()
+    scareThemButton.drawButton()
     for(let i = 0; i < arrayFish.length ; i++)
     {
         arrayFish[i].update()
